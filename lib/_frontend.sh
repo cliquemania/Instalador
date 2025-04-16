@@ -16,7 +16,7 @@ frontend_node_dependencies() {
 
   sudo su - deploy <<EOF
   cd /home/deploy/${instancia_add}/frontend
-  npm install
+  npm install --force
 EOF
 
   sleep 2
@@ -129,7 +129,7 @@ frontend_start_pm2() {
   sudo su - deploy <<EOF
   cd /home/deploy/${instancia_add}/frontend
   pm2 start server.js --name ${instancia_add}-frontend
-  pm2 save
+  pm2 save --force
 EOF
 
  sleep 2
