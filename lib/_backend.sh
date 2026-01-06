@@ -128,6 +128,12 @@ backend_node_build() {
   npm run build
 EOF
 
+  if [ $? -ne 0 ]; then
+    printf "${RED}Erro ao compilar o backend! Instalação abortada.${GRAY_LIGHT}\n"
+    exit 1
+  fi
+
+  printf "${GREEN}✓ Backend compilado com sucesso!${GRAY_LIGHT}\n"
   sleep 2
 }
 
@@ -151,15 +157,20 @@ backend_update() {
   npm install
   npm update -f
   npm install @types/fs-extra
-  rm -rf dist 
+  rm -rf dist
   npm run build
-  npx sequelize db:migrate
-  npx sequelize db:migrate
-  npx sequelize db:seed
+  node run-migration.js || exit 1
+  node run-seed.js || exit 1
   pm2 start ${empresa_atualizar}-backend
-  pm2 save 
+  pm2 save
 EOF
 
+  if [ $? -ne 0 ]; then
+    printf "${RED}Erro ao atualizar o backend! Atualização abortada.${GRAY_LIGHT}\n"
+    exit 1
+  fi
+
+  printf "${GREEN}✓ Backend atualizado com sucesso!${GRAY_LIGHT}\n"
   sleep 2
 }
 
@@ -170,16 +181,22 @@ EOF
 #######################################
 backend_db_migrate() {
   print_banner
-  printf "${WHITE} 💻 Executando db:migrate...${GRAY_LIGHT}"
+  printf "${WHITE} 💻 Executando migrations via Umzug...${GRAY_LIGHT}"
   printf "\n\n"
 
   sleep 2
 
   sudo su - deploy <<EOF
   cd /home/deploy/${instancia_add}/backend
-  npx sequelize db:migrate
+  node run-migration.js
 EOF
 
+  if [ $? -ne 0 ]; then
+    printf "${RED}Erro ao executar migrations! Instalação abortada.${GRAY_LIGHT}\n"
+    exit 1
+  fi
+
+  printf "${GREEN}✓ Migrations executadas com sucesso!${GRAY_LIGHT}\n"
   sleep 2
 }
 
@@ -190,16 +207,22 @@ EOF
 #######################################
 backend_db_seed() {
   print_banner
-  printf "${WHITE} 💻 Executando db:seed...${GRAY_LIGHT}"
+  printf "${WHITE} 💻 Executando seeds via Umzug...${GRAY_LIGHT}"
   printf "\n\n"
 
   sleep 2
 
   sudo su - deploy <<EOF
   cd /home/deploy/${instancia_add}/backend
-  npx sequelize db:seed:all
+  node run-seed.js
 EOF
 
+  if [ $? -ne 0 ]; then
+    printf "${RED}Erro ao executar seeds! Instalação abortada.${GRAY_LIGHT}\n"
+    exit 1
+  fi
+
+  printf "${GREEN}✓ Seeds executados com sucesso!${GRAY_LIGHT}\n"
   sleep 2
 }
 
