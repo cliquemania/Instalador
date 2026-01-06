@@ -32,11 +32,27 @@ system_git_clone() {
   printf "${WHITE} 💻 Fazendo download do código Whaticket...${GRAY_LIGHT}"
   printf "\n\n"
 
-
   sleep 2
 
+  # Verifica se foi fornecido usuário e senha para repositório privado
+  if [ -n "$git_usuario" ] && [ -n "$git_senha" ]; then
+    # Extrai o protocolo e o restante da URL
+    if [[ $link_git =~ ^https?:// ]]; then
+      # Remove o protocolo da URL
+      url_sem_protocolo="${link_git#https://}"
+      url_sem_protocolo="${url_sem_protocolo#http://}"
+
+      # Monta a URL com credenciais
+      git_url_autenticada="https://${git_usuario}:${git_senha}@${url_sem_protocolo}"
+    else
+      git_url_autenticada="$link_git"
+    fi
+  else
+    git_url_autenticada="$link_git"
+  fi
+
   sudo su - deploy <<EOF
-  git clone ${link_git} /home/deploy/${instancia_add}/
+  git clone ${git_url_autenticada} /home/deploy/${instancia_add}/
 EOF
 
   sleep 2

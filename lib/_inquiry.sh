@@ -9,11 +9,28 @@ get_mysql_root_password() {
 }
 
 get_link_git() {
-  
+
   print_banner
   printf "${WHITE} 💻 Insira o link do GITHUB do Whaticket que deseja instalar:${GRAY_LIGHT}"
   printf "\n\n"
   read -p "> " link_git
+}
+
+get_git_usuario() {
+
+  print_banner
+  printf "${WHITE} 💻 Insira o USUARIO do GITHUB (deixe em branco se o repositório for público):${GRAY_LIGHT}"
+  printf "\n\n"
+  read -p "> " git_usuario
+}
+
+get_git_senha() {
+
+  print_banner
+  printf "${WHITE} 💻 Insira a SENHA ou TOKEN do GITHUB (deixe em branco se o repositório for público):${GRAY_LIGHT}"
+  printf "\n\n"
+  read -s -p "> " git_senha
+  printf "\n"
 }
 
 get_instancia_add() {
@@ -158,6 +175,8 @@ get_alter_backend_port() {
 get_urls() {
   get_mysql_root_password
   get_link_git
+  get_git_usuario
+  get_git_senha
   get_instancia_add
   get_max_whats
   get_max_user
