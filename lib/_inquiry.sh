@@ -233,7 +233,11 @@ get_backend_url() {
 }
 
 get_frontend_port() {
-  
+  # Se já está definido no config, não pergunta
+  if [ -n "$frontend_port" ]; then
+    return 0
+  fi
+
   print_banner
   printf "${WHITE} 💻 Digite a porta do FRONTEND para a ${instancia_add}; Ex: 3000 A 3999 ${GRAY_LIGHT}"
   printf "\n\n"
@@ -242,7 +246,11 @@ get_frontend_port() {
 
 
 get_backend_port() {
-  
+  # Se já está definido no config, não pergunta
+  if [ -n "$backend_port" ]; then
+    return 0
+  fi
+
   print_banner
   printf "${WHITE} 💻 Digite a porta do BACKEND para esta instancia; Ex: 4000 A 4999 ${GRAY_LIGHT}"
   printf "\n\n"
@@ -250,7 +258,11 @@ get_backend_port() {
 }
 
 get_redis_port() {
-  
+  # Se já está definido no config, não pergunta
+  if [ -n "$redis_port" ]; then
+    return 0
+  fi
+
   print_banner
   printf "${WHITE} 💻 Digite a porta do REDIS/AGENDAMENTO MSG para a ${instancia_add}; Ex: 5000 A 5999 ${GRAY_LIGHT}"
   printf "\n\n"

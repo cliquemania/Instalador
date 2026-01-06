@@ -23,7 +23,17 @@ instancia_add="whaticket"
 
 # Limites da instância (deixe vazio para perguntar na instalação)
 # Quantidade de conexões/whatsapps que podem ser cadastrados
-max_whats=""
+max_whats="999"
 
 # Quantidade de usuários/atendentes que podem ser cadastrados
-max_user=""
+max_user="999"
+
+# Portas padrão da instância (deixe vazio para perguntar na instalação)
+# Porta do frontend/painel (recomendado: 3000-3999)
+frontend_port="3000"
+
+# Porta do backend/API (recomendado: 4000-4999)
+backend_port="4000"
+
+# Porta do Redis/agendamento de mensagens (recomendado: 5000-5999)
+redis_port="5000"
