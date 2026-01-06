@@ -108,5 +108,6 @@ system_nginx_conf
 system_nginx_restart
 system_certbot_setup
 
-# success message
+# success message - recarregar funções para garantir disponibilidade
+source "${PROJECT_ROOT}"/lib/manifest.sh
 system_success_message

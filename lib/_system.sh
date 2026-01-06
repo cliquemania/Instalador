@@ -637,7 +637,7 @@ EOF
   printf "${CYAN}     ${frontend_url}${NC}\n\n"
 
   printf "${WHITE}  👤 Credenciais Padrão do Sistema:${NC}\n"
-  printf "${CYAN}     Usuário: ${NC}${YELLOW}admin${NC}\n"
+  printf "${CYAN}     Email:   ${NC}${YELLOW}admin@admin.com${NC}\n"
   printf "${CYAN}     Senha:   ${NC}${YELLOW}123456${NC}\n\n"
 
   printf "${GREEN}  ╔══════════════════════════════════════════════════════════════════════╗${NC}\n"
