@@ -589,3 +589,71 @@ EOF
 
   sleep 2
 }
+
+#######################################
+# show installation success info
+# Arguments:
+#   None
+#######################################
+system_success_message() {
+  print_banner
+  printf "${GREEN}"
+  printf "  ╔══════════════════════════════════════════════════════════════════════╗\n"
+  printf "  ║                                                                      ║\n"
+  printf "  ║              ✅ INSTALAÇÃO CONCLUÍDA COM SUCESSO! ✅                 ║\n"
+  printf "  ║                                                                      ║\n"
+  printf "  ╚══════════════════════════════════════════════════════════════════════╝\n"
+  printf "${NC}\n\n"
+
+  printf "${WHITE}  📊 STATUS DOS SERVIÇOS PM2:${NC}\n\n"
+
+  sudo su - deploy <<EOF
+  pm2 list
+EOF
+
+  printf "\n"
+
+  # Verifica se o backend está rodando
+  backend_status=\$(sudo su - deploy -c "pm2 jlist" | grep -c "\"name\":\"${instancia_add}-backend\".*\"status\":\"online\"")
+
+  if [ "\$backend_status" -eq 0 ]; then
+    printf "${RED}  ⚠️  ATENÇÃO: Backend não está rodando! Verificando erros...${NC}\n\n"
+    sudo su - deploy <<EOF
+    pm2 logs ${instancia_add}-backend --lines 50 --nostream
+EOF
+    printf "\n${YELLOW}  Tentando reiniciar o backend...${NC}\n"
+    sudo su - deploy <<EOF
+    pm2 restart ${instancia_add}-backend
+    pm2 save --force
+EOF
+  fi
+
+  printf "\n"
+  printf "${GREEN}  ╔══════════════════════════════════════════════════════════════════════╗${NC}\n"
+  printf "${GREEN}  ║${NC}  ${WHITE}🌐 DADOS DE ACESSO${NC}                                                ${GREEN}║${NC}\n"
+  printf "${GREEN}  ╚══════════════════════════════════════════════════════════════════════╝${NC}\n\n"
+
+  printf "${WHITE}  🔗 URL de Acesso (Frontend):${NC}\n"
+  printf "${CYAN}     ${frontend_url}${NC}\n\n"
+
+  printf "${WHITE}  👤 Credenciais Padrão do Sistema:${NC}\n"
+  printf "${CYAN}     Usuário: ${NC}${YELLOW}admin${NC}\n"
+  printf "${CYAN}     Senha:   ${NC}${YELLOW}123456${NC}\n\n"
+
+  printf "${GREEN}  ╔══════════════════════════════════════════════════════════════════════╗${NC}\n"
+  printf "${GREEN}  ║${NC}  ${WHITE}📞 SUPORTE${NC}                                                        ${GREEN}║${NC}\n"
+  printf "${GREEN}  ╚══════════════════════════════════════════════════════════════════════╝${NC}\n\n"
+
+  printf "${WHITE}  📧 Email de Suporte:${NC}\n"
+  printf "${CYAN}     cliquemania@cliquemania.com.br${NC}\n\n"
+
+  printf "${GREEN}  ╔══════════════════════════════════════════════════════════════════════╗${NC}\n"
+  printf "${GREEN}  ║${NC}  ${WHITE}⚠️  IMPORTANTE${NC}                                                    ${GREEN}║${NC}\n"
+  printf "${GREEN}  ╚══════════════════════════════════════════════════════════════════════╝${NC}\n\n"
+
+  printf "${YELLOW}  ⚠️  Altere a senha padrão após o primeiro login!${NC}\n"
+  printf "${YELLOW}  ⚠️  Mantenha suas credenciais em segurança!${NC}\n\n"
+
+  printf "${WHITE}  Pressione ENTER para finalizar...${NC}"
+  read
+}
