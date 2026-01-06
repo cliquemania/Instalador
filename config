@@ -1,3 +1,29 @@
 deploy_password=
 mysql_root_password=
 db_pass=3PDTleNftG3hfREtysleqHx61bgyKO89z2wIQ2Guw7M=
+
+# Geração automática de senhas
+# Se true, gera senhas automaticamente para deploy e banco de dados
+# Se false, pergunta durante a instalação
+gerar_senha=true
+
+# Configurações do GitHub
+# URL do repositório do Whaticket (deixe vazio para perguntar na instalação)
+link_git="https://github.com/cliquemania/whaticket.git"
+
+# Usuário do GitHub (deixe vazio para perguntar na instalação ou se for repositório público)
+git_usuario="cliquemania"
+
+# Token/Senha do GitHub (sempre será perguntado na instalação por segurança)
+# Não preencher aqui - será solicitado durante a instalação
+git_senha=""
+
+# Nome da instância (deixe vazio para perguntar na instalação)
+instancia_add="whaticket"
+
+# Limites da instância (deixe vazio para perguntar na instalação)
+# Quantidade de conexões/whatsapps que podem ser cadastrados
+max_whats=""
+
+# Quantidade de usuários/atendentes que podem ser cadastrados
+max_user=""

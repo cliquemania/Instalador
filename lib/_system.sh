@@ -14,10 +14,26 @@ system_create_user() {
 
   sleep 2
 
-  sudo su - root <<EOF
-  useradd -m -p $(openssl passwd -crypt ${mysql_root_password}) -s /bin/bash -G sudo deploy
-  usermod -aG sudo deploy
+  # Verifica se o usuário deploy já existe
+  if id "deploy" &>/dev/null; then
+    printf "${WHITE} 💻 Usuário deploy já existe, pulando criação...${GRAY_LIGHT}"
+    printf "\n\n"
+  else
+    sudo su - root <<EOF
+    useradd -m -p \$(openssl passwd -crypt ${mysql_root_password}) -s /bin/bash -G sudo deploy
+    usermod -aG sudo deploy
 EOF
+
+    # Verifica se o usuário foi criado com sucesso
+    if id "deploy" &>/dev/null; then
+      printf "${WHITE} 💻 Usuário deploy criado com sucesso!${GRAY_LIGHT}"
+      printf "\n\n"
+    else
+      printf "${RED} ❌ Erro ao criar usuário deploy!${GRAY_LIGHT}"
+      printf "\n\n"
+      exit 1
+    fi
+  fi
 
   sleep 2
 }
@@ -33,6 +49,13 @@ system_git_clone() {
   printf "\n\n"
 
   sleep 2
+
+  # Verifica se o usuário deploy existe
+  if ! id "deploy" &>/dev/null; then
+    printf "${RED} ❌ Erro: Usuário deploy não existe! Execute system_create_user primeiro.${GRAY_LIGHT}"
+    printf "\n\n"
+    exit 1
+  fi
 
   # Verifica se foi fornecido usuário e senha para repositório privado
   if [ -n "$git_usuario" ] && [ -n "$git_senha" ]; then
@@ -54,6 +77,16 @@ system_git_clone() {
   sudo su - deploy <<EOF
   git clone ${git_url_autenticada} /home/deploy/${instancia_add}/
 EOF
+
+  # Verifica se o clone foi bem-sucedido
+  if [ -d "/home/deploy/${instancia_add}/.git" ]; then
+    printf "${WHITE} 💻 Código clonado com sucesso!${GRAY_LIGHT}"
+    printf "\n\n"
+  else
+    printf "${RED} ❌ Erro ao clonar o repositório!${GRAY_LIGHT}"
+    printf "\n\n"
+    exit 1
+  fi
 
   sleep 2
 }

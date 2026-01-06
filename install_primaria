@@ -23,6 +23,32 @@ if [[ ! -e "${PROJECT_ROOT}"/config ]]; then
 deploy_password=${deploy_password}
 mysql_root_password=${mysql_root_password}
 db_pass=${db_pass}
+
+# Geração automática de senhas
+# Se true, gera senhas automaticamente para deploy e banco de dados
+# Se false, pergunta durante a instalação
+gerar_senha=${gerar_senha:-true}
+
+# Configurações do GitHub
+# URL do repositório do Whaticket (deixe vazio para perguntar na instalação)
+link_git="${link_git}"
+
+# Usuário do GitHub (deixe vazio para perguntar na instalação ou se for repositório público)
+git_usuario="${git_usuario}"
+
+# Token/Senha do GitHub (sempre será perguntado na instalação por segurança)
+# Não preencher aqui - será solicitado durante a instalação
+git_senha="${git_senha}"
+
+# Nome da instância (deixe vazio para perguntar na instalação)
+instancia_add="${instancia_add}"
+
+# Limites da instância (deixe vazio para perguntar na instalação)
+# Quantidade de conexões/whatsapps que podem ser cadastrados
+max_whats="${max_whats}"
+
+# Quantidade de usuários/atendentes que podem ser cadastrados
+max_user="${max_user}"
 EOF
 fi
 
