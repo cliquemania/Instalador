@@ -14,19 +14,9 @@ generate_jwt_secret() {
 }
 
 get_mysql_root_password() {
-  # Se gerar_senha=true, gera automaticamente
+  # Se gerar_senha=true, gera automaticamente em background
   if [[ "$gerar_senha" == "true" ]]; then
     mysql_root_password=$(generate_password)
-
-    print_banner
-    printf "${WHITE} 💻 Senha gerada automaticamente para Deploy e Banco de Dados:${GRAY_LIGHT}"
-    printf "\n\n"
-    printf "${GREEN} 🔐 Senha: ${mysql_root_password}${GRAY_LIGHT}"
-    printf "\n\n"
-    printf "${YELLOW} ⚠️  IMPORTANTE: Anote esta senha, você precisará dela!${GRAY_LIGHT}"
-    printf "\n\n"
-    printf "${WHITE} Pressione ENTER para continuar...${GRAY_LIGHT}"
-    read -p ""
     return 0
   fi
 
@@ -197,26 +187,7 @@ get_instancia_add() {
 }
 
 generate_jwt_secrets() {
-  # Se gerar_senha=true, gera JWT secrets automaticamente
-  if [[ "$gerar_senha" == "true" ]]; then
-    jwt_secret=$(generate_jwt_secret)
-    jwt_refresh_secret=$(generate_jwt_secret)
-
-    print_banner
-    printf "${WHITE} 💻 JWT Secrets gerados automaticamente:${GRAY_LIGHT}"
-    printf "\n\n"
-    printf "${GREEN} 🔐 JWT_SECRET: ${jwt_secret}${GRAY_LIGHT}"
-    printf "\n\n"
-    printf "${GREEN} 🔐 JWT_REFRESH_SECRET: ${jwt_refresh_secret}${GRAY_LIGHT}"
-    printf "\n\n"
-    printf "${YELLOW} ⚠️  Estes secrets serão configurados automaticamente no .env${GRAY_LIGHT}"
-    printf "\n\n"
-    printf "${WHITE} Pressione ENTER para continuar...${GRAY_LIGHT}"
-    read -p ""
-    return 0
-  fi
-
-  # Se gerar_senha=false, gera mesmo assim mas não exibe (segurança)
+  # Gera JWT secrets silenciosamente
   jwt_secret=$(generate_jwt_secret)
   jwt_refresh_secret=$(generate_jwt_secret)
 }
